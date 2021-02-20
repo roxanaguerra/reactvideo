@@ -1,22 +1,19 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState, useEffect } from 'react';
-import Header from '../components/Header';
+import React from 'react';
 import Search from '../components/Search';
 import Categories from '../components/Categories';
 import Carousel from '../components/Carousel';
 import CarouselItem from '../components/CarouselItem';
-import Footer from '../components/Footer';
 import useInitialState from '../hooks/useInitialState';
-import '../assets/styles/App.scss';
+// import '../assets/styles/App.scss';
 
 const API = 'http://localhost:3000/initialState';
 
-export const App = () => {
+export const Home = () => {
   const videos = useInitialState(API);
 
   return (
-    <div>
-      <Header />
+    <>
       <Search />
       {videos && Object.keys(videos).map((categorie) => {
         if (videos[categorie].length) {
@@ -45,8 +42,7 @@ export const App = () => {
         }
         return null;
       })}
-      <Footer />
-    </div>
+    </>
   );
 };
 
@@ -87,7 +83,7 @@ export const App = () => {
 //     ));
 // };
 
-export default App;
+export default Home;
 
 // const App = () => {
 
