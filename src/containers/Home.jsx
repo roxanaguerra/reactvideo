@@ -1,21 +1,66 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
+import { connect } from 'react-redux';
+import Header from '../components/Header';
 import Search from '../components/Search';
 import Categories from '../components/Categories';
 import Carousel from '../components/Carousel';
 import CarouselItem from '../components/CarouselItem';
-import useInitialState from '../hooks/useInitialState';
 // import '../assets/styles/App.scss';
 
-const API = 'http://localhost:3000/initialState';
+// const API = 'http://localhost:3000/initialState';
 
-export const Home = () => {
-  const videos = useInitialState(API);
+export const Home = ({ myList, trends, originals, searchResult }) => {
+  // const videos = useInitialState(API);
 
   return (
     <>
-      <Search />
-      {videos && Object.keys(videos).map((categorie) => {
+      <Header />
+      <Search isHome />
+
+      {searchResult.length > 0 && (
+        <Categories title='Search'>
+          <Carousel>
+            {searchResult.map((item) => (
+              <CarouselItem key={item.id} {...item} />
+            ))}
+          </Carousel>
+        </Categories>
+      )}
+
+      {myList.length > 0 && (
+        <Categories title='Mi Lista'>
+          <Carousel>
+            <CarouselItem />
+            {myList.map((item) => (
+              <CarouselItem
+                key={item.id}
+                {...item}
+                isList
+              />
+            ))}
+          </Carousel>
+        </Categories>
+      )}
+
+      <Categories title='Tendencias'>
+        <Carousel>
+          {trends.map((item) => (
+            <CarouselItem
+              key={item.id}
+              {...item}
+            />
+          ))}
+        </Carousel>
+      </Categories>
+
+      <Categories title='Originales'>
+        <Carousel>
+          {originals.map((item) => <CarouselItem key={item.id} {...item} />)}
+        </Carousel>
+      </Categories>
+
+      {/* {videos && Object.keys(videos).map((categorie) => {
         if (videos[categorie].length) {
           return (
             <Categories
@@ -41,10 +86,22 @@ export const Home = () => {
           );
         }
         return null;
-      })}
+      })} */}
     </>
   );
 };
+
+const mapStateToProps = (state) => {
+  return {
+    myList: state.myList,
+    trends: state.trends,
+    originals: state.originals,
+    searchResult: state.searchResult,
+  };
+};
+
+// export default Home;
+export default connect(mapStateToProps, null)(Home);
 
 // const App = () => {
 
@@ -82,8 +139,6 @@ export const Home = () => {
 //       </div>
 //     ));
 // };
-
-export default Home;
 
 // const App = () => {
 
